@@ -18,3 +18,16 @@ export const addItems = (name: string, quantity: number, purchased: boolean): Sh
     shoppingList.push(newItem);
     return newItem;
 }
+
+export const deleteItem = (id: number): ShoppingListItem | undefined => {
+    const item = shoppingList.find(item => item.id === id);
+    if (!item) {
+        return undefined;
+    }
+    shoppingList = shoppingList.filter(item => item.id !== id);
+    return item;
+};
+
+
+
+    
