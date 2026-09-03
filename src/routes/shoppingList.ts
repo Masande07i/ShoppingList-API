@@ -60,32 +60,31 @@ export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => 
             });
             return;
         }
-    if (req.method === 'DELETE' && id !== undefined) {
+        if (req.method === 'DELETE' && id !== undefined) {
 
-      if (isNaN(id)) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: "Invalid item id"}));
-        return;
-     }
-       const deletedItem = deleteItem(id);
+         if (isNaN(id)) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ message: "Invalid item id"}));
+          return;
+        }
+        const deletedItem = deleteItem(id);
 
-     if (!deletedItem) {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({message: "Item not found"}));
-        return;
+        if (!deletedItem) {
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({message: "Item not found"}));
+         return;
+        }
+
+         res.writeHead(200, { 'Content-Type': 'application/json' });
+         res.end(JSON.stringify({message: "Item deleted successfully",item: deletedItem}));
+         return;
+       }
+         res.writeHead(204, { 'Content-Type': 'application/json' }); 
+         res.end(JSON.stringify({message: "No content"})); 
+         return; 
     }
-
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-        message: "Item deleted successfully",
-        item: deletedItem
-    }));
-
-    return;
-}
     res.writeHead(405, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({message: "Method not allowed"}));
     }
     
 
-}
