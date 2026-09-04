@@ -28,12 +28,12 @@ export const deleteItem = (id: number): ShoppingListItem | undefined => {
     return item;
 };
 
-export const updateItem = (id: number, updates: Partial<Omit<ShoppingListItem, "id">>): ShoppingListItem | undefined =>{ 
+export const updateItem = (id: number, changes: Partial<Omit<ShoppingListItem, "id">>): ShoppingListItem | undefined =>{ 
   const item = getItemById(id); 
     if(!item) return undefined; 
-     if(updates.name !== undefined) item.name = updates.name; 
-     if(updates.purchased !== undefined) item.purchased = updates.purchased; 
-     if(updates.quantity !== undefined) item.quantity = updates.quantity; 
+     if(changes.name !== undefined) item.name = changes.name; 
+     if(changes.purchased !== undefined) item.purchased = changes.purchased; 
+     if(changes.quantity !== undefined) item.quantity = changes.quantity; 
   return item; 
 }
 

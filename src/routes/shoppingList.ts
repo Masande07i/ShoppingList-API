@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { getItemById ,getShoppingList,addItems,deleteItem} from "../controllers/shoppingList.js";
+import { getItemById ,getShoppingList,addItems,deleteItem,updateItem} from "../controllers/shoppingList.js";
 
 export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => {
     if (req.url?.startsWith('/shopping-list')) {
@@ -59,7 +59,36 @@ export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => 
                 }
             });
             return;
+        } 
+        
+        if (req.method === 'PUT' && id !== undefined) {
+            if (isNaN(id)) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ message: "Invalid item ID" }));
+            }
+
+            let body = '';
+            req.on('data', chunk => body += chunk.toString());
+            req.on('end', () => {
+                try {
+                    const updates = JSON.parse(body);
+                    const updatedItem = updateItem(id, updates);
+
+                    if (!updatedItem) {
+                        res.writeHead(404, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ message: "Item not found" }));
+                    }
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(updatedItem));
+                } catch {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ message: "Invalid JSON" }));
+                }
+            });
+            return;
         }
+
         if (req.method === 'DELETE' && id !== undefined) {
 
          if (isNaN(id)) {
@@ -82,7 +111,12 @@ export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => 
          res.writeHead(204, { 'Content-Type': 'application/json' }); 
          res.end(JSON.stringify({message: "No content"})); 
          return; 
+
+         
     }
+    
+
+
     res.writeHead(405, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({message: "Method not allowed"}));
     }
