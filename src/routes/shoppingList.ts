@@ -71,6 +71,7 @@ export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => 
             req.on('data', chunk => body += chunk.toString());
             req.on('end', () => {
                 try {
+
                     const updates = JSON.parse(body);
                     const updatedItem = updateItem(id, updates);
 
@@ -104,19 +105,12 @@ export const shoppingListRoute = (req: IncomingMessage, res: ServerResponse) => 
          return;
         }
 
-         res.writeHead(200, { 'Content-Type': 'application/json' });
-         res.end(JSON.stringify({message: "Item deleted successfully",item: deletedItem}));
+         res.writeHead(204, { 'Content-Type': 'application/json' });
+         res.end(JSON.stringify({message: "No content",item: deletedItem}));
          return;
        }
-         res.writeHead(204, { 'Content-Type': 'application/json' }); 
-         res.end(JSON.stringify({message: "No content"})); 
-         return; 
-
-         
     }
     
-
-
     res.writeHead(405, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({message: "Method not allowed"}));
     }
