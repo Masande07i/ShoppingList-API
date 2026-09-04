@@ -28,15 +28,14 @@ export const deleteItem = (id: number): ShoppingListItem | undefined => {
     return item;
 };
 
-export const updateItem = ( id: number,name: string, quantity: number,purchased: boolean): ShoppingListItem | undefined => {
-    const item = shoppingList.find(item => item.id === id);
-    if (!item) {
-        return undefined;
-    }
-    item.name = name;
-    item.quantity = quantity;
-    item.purchased = purchased;
-    return item;
-};
+export const updateItem = (id: number, updates: Partial<Omit<ShoppingListItem, "id">>): ShoppingListItem | undefined =>{ 
+  const item = getItemById(id); 
+    if(!item) return undefined; 
+     if(updates.name !== undefined) item.name = updates.name; 
+     if(updates.purchased !== undefined) item.purchased = updates.purchased; 
+     if(updates.quantity !== undefined) item.quantity = updates.quantity; 
+  return item; 
+}
+
 
     
